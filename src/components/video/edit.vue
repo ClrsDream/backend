@@ -1,21 +1,44 @@
 <style lang="less"></style>
 <template>
-  <div class="">
+  <div class>
     <div class="table-basic-vue frame-page h-panel">
-      <div class="h-panel-bar"><span class="h-panel-title">编辑视频</span></div>
+      <div class="h-panel-bar">
+        <span class="h-panel-title">编辑视频</span>
+      </div>
       <div class="h-panel-body">
         <p>
           <Button class="h-btn h-btn-primary" icon="icon-arrow-left" @click="back()">返回列表</Button>
         </p>
 
-        <Form ref="form" mode="block" :validOnChange="true" :showErrorTip="true" :labelWidth="110" :rules="rules" :model="video">
+        <Form
+          ref="form"
+          mode="block"
+          :validOnChange="true"
+          :showErrorTip="true"
+          :labelWidth="110"
+          :rules="rules"
+          :model="video"
+        >
           <FormItem label="所属课程" prop="course_id">
             <template v-slot:label>所属课程</template>
-            <Select v-model="video.course_id" :datas="courses" keyName="id" titleName="title" :filterable="true" @change="selectCourse"></Select>
+            <Select
+              v-model="video.course_id"
+              :datas="courses"
+              keyName="id"
+              titleName="title"
+              :filterable="true"
+              @change="selectCourse"
+            ></Select>
           </FormItem>
           <FormItem label="章节" prop="chapter_id">
             <template v-slot:label>章节</template>
-            <Select v-model="video.chapter_id" :datas="chapters" keyName="id" titleName="title" :filterable="true"></Select>
+            <Select
+              v-model="video.chapter_id"
+              :datas="chapters"
+              keyName="id"
+              titleName="title"
+              :filterable="true"
+            ></Select>
           </FormItem>
           <FormItem label="视频名" prop="title">
             <template v-slot:label>视频名</template>
@@ -27,6 +50,10 @@
               <input type="text" v-model="video.charge" />
               <span class="h-input-addon">元</span>
             </div>
+          </FormItem>
+          <FormItem label="禁止购买" prop="is_ban_sell">
+            <template v-slot:label>禁止购买</template>
+            <h-switch v-model="video.is_ban_sell" :trueValue="1" :falseValue="0"></h-switch>
           </FormItem>
           <FormItem label="简短介绍" prop="short_description">
             <template v-slot:label>简短介绍</template>
@@ -109,7 +136,7 @@ export default {
       tabs: ['阿里云', '腾讯云', '直链'],
       tab: '阿里云',
       rules: {
-        required: ['course_id', 'title', 'charge', 'short_description', 'published_at', 'is_show', 'seo_description', 'seo_keywords']
+        required: ['course_id', 'title', 'charge', 'short_description', 'published_at', 'is_show', 'seo_description', 'seo_keywords', 'is_ban_sell']
       }
     };
   },
@@ -133,7 +160,7 @@ export default {
       this.video.is_show = 0;
 
       // 读取创建所需要的参数
-      R.Video.CreateParams().then(resp => {
+      R.Video.Create().then(resp => {
         this.courses = resp.data.courses;
       });
 

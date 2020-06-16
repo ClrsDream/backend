@@ -3,14 +3,20 @@
   <div style="width: 700px;">
     <div class="table-basic-vue frame-page h-panel">
       <div class="h-panel-bar">
-        <span class="h-panel-title">数据统计</span>
+        <span class="h-panel-title">订单量统计</span>
       </div>
       <div class="h-panel-body">
+         <Form :labelWidth="110">
+          <FormItem label="时间范围">
+            <DateRangePicker v-model="daterange"></DateRangePicker>
+          </FormItem>
+          <FormItem>
+            <Button color="primary" @click="getData(true)">过滤</Button>
+            <Button @click="close">关闭</Button>
+          </FormItem>
+        </Form>
         <div>
           <line-chart :height="200" :chart-data="data"></line-chart>
-        </div>
-        <div class="mt-10">
-          <Button @click="close">关闭</Button>
         </div>
       </div>
     </div>
@@ -26,22 +32,31 @@ export default {
   props: ['id'],
   data() {
     return {
-      adfrom: null,
-      data: null
+      data: {},
+      daterange: {
+        start: null,
+        end: null
+      }
     };
   },
   mounted() {
-    this.init();
+    this.getData();
   },
   methods: {
-    init() {
-      R.AdFrom.Number({ id: this.id }).then(resp => {
-        this.adfrom = resp.data.ad;
+    getData() {
+      let data = {};
+      if (this.daterange.start) {
+        data.start_at = this.daterange.start;
+      }
+      if (this.daterange.end) {
+        data.end_at = this.daterange.end;
+      }
+      R.Statistic.orderCreated(data).then(resp => {
         let data = {
           labels: resp.data.labels,
           datasets: [
             {
-              label: '统计',
+              label: '订单数',
               data: resp.data.dataset
             }
           ]

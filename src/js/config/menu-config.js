@@ -24,7 +24,7 @@ const fullMenus = [{
         key: 'Slider'
     },
     {
-        title: '首页Banner',
+        title: '首页推荐',
         key: 'IndexBanner'
     },
     {
@@ -38,6 +38,10 @@ const fullMenus = [{
     {
         title: '视频评论',
         key: 'VideoComment'
+    },
+    {
+        title: '统计工具',
+        key: 'Statistic'
     }
     ]
 },
